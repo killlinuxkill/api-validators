@@ -23,24 +23,35 @@ class Validator extends \exactdata\validators\base\ValidatorBase implements \exa
 
     /**
      * @param array ['emailAddress']
-     * @return bool
+     * @return object
      */
     public function validate($item = [])
     {
-        $result = (new Client())->request('GET', $this->_apiUrl, [
-            'EmailAddress' => $item['emailAddress'], 
+        $result = new \stdClass(['success' => false, 'info' => '']);
+
+        $response = (new Client())->request('GET', $this->_apiUrl, [
+            'EmailAddress' => $item['emailAddress'],
             'APIKey' => $this->_apiKey
         ]);
 
-        switch ($result->getStatusCode()) {
+        if ($response->getStatusCode() != 200) {
+            return $result;
+        }
+
+        $contents = $response->getBody()->getContents();
+        $contents = json_decode($contents);
+
+        switch ($contents->status) {
             case 200:
             case 207:
             case 215:
-                return true;
+                $result->success =  true;
                 break;
             default:
-                return false;
+                $result->success =  false;
                 break;
         }
+        $result->info = $contents->info;
+        return $result;
     }
 }

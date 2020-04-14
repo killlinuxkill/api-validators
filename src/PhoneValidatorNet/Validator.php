@@ -23,30 +23,39 @@ class Validator extends \exactdata\validators\base\ValidatorBase implements \exa
 
     /**
      * @param array [phoneNumber, countryCode, locale]
-     * @return bool
+     * @return object
      */
     public function validate($item = [])
     {
-        $result = (new Client())->request('POST', $this->_apiUrl, [
+        $result = new \stdClass(['success' => false, 'info' => '']);
+
+        $response = (new Client())->request('POST', $this->_apiUrl, [
             'PhoneNumber' => $item['phoneNumber'],
             'CountryCode' => $item['countryCode'],
             'Locale' => $item['locale'],
             'APIKey' => $this->_apiKey
         ]);
 
-        $content = $result->getBody();
+        if ($response->getStatusCode() != 200) {
+            return $result;
+        }
 
-        switch($content['status']) {
+        $contents = $response->getBody()->getContents();
+        $contents = json_decode($contents);
+
+        switch($contents->status) {
             case "VALID_CONFIRMED":
             case "VALID_UNCONFIRMED":
-                return true;
+                $result->success = true;
                 break;
-            case "INVALID": 
-                return false;
+            case "INVALID":
+                $result->success = false;
                 break;
             default:
-                return false;
+                $result->success = false;
                 break;
         }
+        $result->info = $contents->info;
+        return $result;
     }
 }

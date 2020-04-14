@@ -14,7 +14,7 @@ class Validator extends \exactdata\validators\base\ValidatorBase implements \exa
     /**
      * @param array [apiKey]
      */
-    public function config(array $config): void
+    public function config($config = [])
     {
         if (!empty($config['apiKey'])) {
             $this->_apiKey = $config['apiKey'];
@@ -25,7 +25,7 @@ class Validator extends \exactdata\validators\base\ValidatorBase implements \exa
      * @param array ['emailAddress']
      * @return bool
      */
-    public function validate(array $item): bool
+    public function validate($item = [])
     {
         $result = (new Client())->request('GET', $this->_apiUrl, [
             'EmailAddress' => $item['emailAddress'], 

@@ -3,7 +3,7 @@ namespace exactdata\validators\base;
 
 class ValidatorBase
 {
-    public function __construct(array $config = [])
+    public function __construct($config = [])
     {
         $this->config($config);
     }

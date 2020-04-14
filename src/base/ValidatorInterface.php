@@ -3,7 +3,7 @@ namespace exactdata\validators\base;
 
 interface ValidatorInterface
 {
-    public function config(array $config = []): void;
+    public function config($config = []);
 
-    public function validate(array $item = []): bool;
+    public function validate($item = []);
 }

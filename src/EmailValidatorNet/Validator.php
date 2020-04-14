@@ -30,8 +30,10 @@ class Validator extends \exactdata\validators\base\ValidatorBase implements \exa
         $result = new \stdClass(['success' => false, 'info' => '']);
 
         $response = (new Client())->request('GET', $this->_apiUrl, [
-            'EmailAddress' => $item['emailAddress'],
-            'APIKey' => $this->_apiKey
+            'query' => [
+                'EmailAddress' => $item['emailAddress'],
+                'APIKey' => $this->_apiKey
+                ]
         ]);
 
         if ($response->getStatusCode() != 200) {

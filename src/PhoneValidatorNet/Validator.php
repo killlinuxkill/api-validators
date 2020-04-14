@@ -29,11 +29,13 @@ class Validator extends \exactdata\validators\base\ValidatorBase implements \exa
     {
         $result = new \stdClass(['success' => false, 'info' => '']);
 
-        $response = (new Client())->request('POST', $this->_apiUrl, [
-            'PhoneNumber' => $item['phoneNumber'],
-            'CountryCode' => $item['countryCode'],
-            'Locale' => $item['locale'],
-            'APIKey' => $this->_apiKey
+        $response = (new Client())->request('GET', $this->_apiUrl, [
+            'query' => [
+                'PhoneNumber' => $item['phoneNumber'],
+                'CountryCode' => $item['countryCode'],
+                'Locale' => $item['locale'],
+                'APIKey' => $this->_apiKey
+                ]
         ]);
 
         if ($response->getStatusCode() != 200) {

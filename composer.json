@@ -1,6 +1,6 @@
  
 {
-    "name": "exactdata/validators",
+    "name": "exactdata/api-validators",
     "description": "Providers for remote validators api",
     "type": "extension",
     "authors": [
